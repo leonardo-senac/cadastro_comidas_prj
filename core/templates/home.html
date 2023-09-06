@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% for comida in comidas %}
+    <p>{{comida.nome}}</p>
+    <p>{{comida.descricao}}</p>
+    <p>{{comida.preco}}</p>
+    <p>{{comida.estoque}}</p>
+    <p>{{comida.categoria.nome}}</p>
+    <a href="{% url 'excluir_comida' comida.id %}">Excluir comida</a>
+    <br>
+    <br>
+    <hr>
+    {% endfor %}
+</body>
+
+</html>

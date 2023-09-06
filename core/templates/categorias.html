@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+        </tr>
+        {% for categoria in categorias %}
+        <tr>
+            <td>{{categoria.id}}</td>
+            <td>{{categoria.nome}}</td>
+            <td><a href="{% url 'excluir_categoria' categoria.id %}">Excluir categoria</a></td>
+            <td><a href="{% url 'comidas_por_categoria' categoria.id %}">Ver página</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
