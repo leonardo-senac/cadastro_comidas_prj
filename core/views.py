@@ -58,3 +58,13 @@ def comidas_por_categoria(request, id_categoria):
     comidas = Comida.objects.filter(categoria=categoria_puxada)
 
     return render(request, 'home.html', {'comidas': comidas})
+
+def editar_categoria(request, id_categoria):
+    categoria_puxada = Categoria.objects.get(id=id_categoria)
+
+    if request.method == 'POST':
+        categoria_puxada.nome = request.POST['nome_categoria']
+        categoria_puxada.save()
+        return redirect(exibir_categorias)
+
+    return render(request, 'editar_categoria.html', {'categoria': categoria_puxada})
