@@ -68,3 +68,17 @@ def editar_categoria(request, id_categoria):
         return redirect(exibir_categorias)
 
     return render(request, 'editar_categoria.html', {'categoria': categoria_puxada})
+
+def editar_comida(request, id_comida):
+    categorias = Categoria.objects.all()
+    comida = Comida.objects.get(id=id_comida)
+    if request.method == "POST":
+        comida.nome = request.POST['nome_comida']
+        comida.descricao = request.POST['descricao_comida']
+        comida.estoque = request.POST['estoque']
+        comida.preco = request.POST['preco']
+        comida.categoria = Categoria.objects.get(id=request.POST['id_categoria'])
+
+        comida.save()
+
+    return render(request, 'editar_comida.html', {'comida': comida, 'categorias': categorias})

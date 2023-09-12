@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Temos uma variável chamada 'comida' -->
+    <form action="{% url 'editar_comida' comida.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="nome_comida" placeholder="Nome..." value="{{comida.nome}}">
+        <input type="text" name="descricao_comida" placeholder="Descrição..." value="{{comida.descricao}}">
+        <input type="number" name="estoque" placeholder="Estoque..." value="{{comida.estoque}}">
+        <input type="number" name="preco" step="0.01" placeholder="Preço..." value="{{comida.preco}}">
+        <select name="id_categoria">
+            {% for categoria in categorias %}
+            {% if categoria.id == comida.categoria.id %}
+            <option value="{{categoria.id}}" selected>{{categoria.nome}}</option>
+            {% else %}
+            <option value="{{categoria.id}}">{{categoria.nome}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        <button type="submit">Salvar</button>
+    </form>
+</body>
+</html>
