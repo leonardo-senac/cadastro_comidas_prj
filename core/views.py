@@ -1,23 +1,50 @@
 from django.shortcuts import render, redirect
 from .models import *
+from .forms import *
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 # Create your views here.
 
+def logar(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            usuario = form.get_user()
+            login(request, usuario)
+            return redirect(home)
+    else:
+        form = AuthenticationForm()
+    return render(request, 'logar.html', {'form': form})
+
+def cadastrar(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(logar)
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'cadastrar.html', {'form': form})
+
 def cadastrar_comida(request):
-    categorias = Categoria.objects.all()
+    form = FormComida()
     if request.method == 'POST':
         # Abrindo a carta
-        nome_comida = request.POST['nome_comida']
-        descricao_comida = request.POST['descricao_comida']
-        estoque = request.POST['estoque']
-        preco = request.POST['preco']
-        id_categoria = request.POST['id_categoria']
-        categoria = Categoria.objects.get(id=id_categoria)
+        form = FormComida(request.POST)
+        if form.is_valid():
+            nome_comida = form.cleaned_data['nome']
+            descricao_comida = form.cleaned_data['descricao']
+            estoque = form.cleaned_data['estoque']
+            preco = form.cleaned_data['preco']
+            categoria = form.cleaned_data['categoria']
 
-        # Salvando no banco de dados
-        Comida.objects.create(nome=nome_comida, descricao=descricao_comida, estoque=estoque, preco=preco, categoria=categoria)
+            # Salvando no banco de dados
+            Comida.objects.create(nome=nome_comida, descricao=descricao_comida, estoque=estoque, preco=preco, categoria=categoria)
 
-    return render(request, 'cadastro_comida.html', {'categorias': categorias})
+    return render(request, 'cadastro_comida.html', {'form': form})
 
 def home(request):
     comidas = Comida.objects.all()
@@ -31,14 +58,16 @@ def excluir_comida(request, id_comida):
     return redirect(home)
 
 def cadastrar_categoria(request):
+    form = FormCategoria()
     if request.method == 'POST':
-        # Abrindo a carta
-        nome_categoria = request.POST['nome_categoria']
+        form = FormCategoria(request.POST)
+        if form.is_valid():
+            # Abrindo a carta
+            nome_categoria = form.cleaned_data['nome_categoria']
+            # Salvando no banco de dados
+            Categoria.objects.create(nome=nome_categoria)
 
-        # Salvando no banco de dados
-        Categoria.objects.create(nome=nome_categoria)
-
-    return render(request, 'cadastro_categoria.html')
+    return render(request, 'cadastro_categoria.html', {'form': form})
 
 def exibir_categorias(request):
     categorias = Categoria.objects.all()

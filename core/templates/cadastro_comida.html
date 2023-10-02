@@ -8,15 +8,7 @@
 <body>
     <form action="{% url 'cadastrar_comida' %}" method="post">
         {% csrf_token %}
-        <input type="text" name="nome_comida" placeholder="Nome...">
-        <input type="text" name="descricao_comida" placeholder="Descrição...">
-        <input type="number" name="estoque" placeholder="Estoque...">
-        <input type="number" name="preco" step="0.01" placeholder="Preço...">
-        <select name="id_categoria">
-            {% for categoria in categorias %}
-            <option value="{{categoria.id}}">{{categoria.nome}}</option>
-            {% endfor %}
-        </select>
+        {{form}}
         <button type="submit">Salvar</button>
     </form>
 </body>
